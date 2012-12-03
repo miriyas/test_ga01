@@ -7,6 +7,8 @@ gem 'rails', '3.2.8'
 
 gem 'sqlite3'
 
+gem 'thin'    # Could not determine content-length of response body 이 에러때매 짱나서 다른 서버 씀.
+
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -22,6 +24,7 @@ end
 
 gem 'jquery-rails'
 gem 'gattica', :git => 'git://github.com/chrisle/gattica.git'
+gem "google_visualr", ">= 2.1"
 
 
 # To use ActiveModel has_secure_password

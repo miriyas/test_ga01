@@ -1,25 +1,51 @@
-<h1>Listing posts</h1>
+<h1>Google Analytics Datas</h1>
+<h2><%= $start_date %> / <%= $end_date %></h2>
+
+<%= form_tag("/posts", :method => "get") do %>
+  <span>날짜 범위 :<%= select_date $start_date.to_time, :prefix => :start_date %>~<%= select_date $end_date.to_time, :prefix => :end_date %></span>
+  <%= submit_tag("Apply", :disable_with => "applying..") %>
+<% end %>
+
+<div id='chart_monthly_visitors'></div>
+<%= render_chart(@chart_monthly_visitors, 'chart_monthly_visitors') %>
+<br/>
+
+<div id='chart_daily_visitors'></div>
+<%= render_chart(@chart_daily_visitors, 'chart_daily_visitors') %>
+<br/>
+
+<div id='chart_new_visitors_rate_month'></div>
+<%= render_chart(@chart_new_visitors_rate_month, 'chart_new_visitors_rate_month') %>
+
+<div id='chart_mobile_visitors_rate_month'></div>
+<%= render_chart(@chart_mobile_visitors_rate_month, 'chart_mobile_visitors_rate_month') %>
+
+<div id='chart_geo_chart'></div>
+<%= render_chart(@chart_geo_chart, 'chart_geo_chart') %>
 
 <table>
-  <tr>
-    <th>Title</th>
-    <th>Text</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @posts.each do |post| %>
-  <tr>
-    <td><%= post.title %></td>
-    <td><%= post.text %></td>
-    <td><%= link_to 'Show', post %></td>
-    <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+  <tbody>
+    <tr>
+      <th>Country</th>
+      <th>Visits</th>
+      <th>PV/Visit</th>
+      <th>avgTime</th>
+      <th>newVisits%</th>
+      <th>Visit/Bounce</th>
+    </tr>
+    <% $geo_chart.each do |data| %>
+    <tr>
+      <td><%= data['country'] %></td>
+      <td><%= data['visits'].to_i %></td>
+      <td><%= number_with_precision(data['pageviewsPerVisit'], :precision => 2) %></td>
+      <td><%= number_with_precision(data['avgTimeOnPage'], :precision => 2) %></td>
+      <td><%= number_with_precision(data['percentNewVisits'], :precision => 2) %></td>
+      <td><%= number_with_precision(data['visitBounceRate'], :precision => 2) %></td>
+    </tr>
+    <% end %>
+  </tbody>
 </table>
+<br/>
 
-<br />
-
-<%= link_to 'New Post', new_post_path %>
+<div id='chart_korea_chart'></div>
+<%= render_chart(@chart_korea_chart, 'chart_korea_chart') %>

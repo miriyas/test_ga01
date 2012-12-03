@@ -9,31 +9,36 @@ class PagesController < ApplicationController
         account.profiles.each do |profile|
           if profile.id == 66404880
             @profile = profile
-          break
+            break
+          end
         end
       end
     end
   end
   
-  def update_all
-    @pages = Page.all
-    @pages.each do |page|
-      get_analytics_profile if !@profile
-        report = Garb::Report.new(@profile)
-        report.metrics :unique_pageviews
-        report.dimensions :page_path
-        report.filters :page_path.contains => page.url
-        page.unique_pageviews = report.results.first.unique_pageviews
-        page.save
-      end
-    end 
-  end
+  # def update_all
+  #   @pages = Page.all
+  #   @pages.each do |page|
+  #     get_analytics_profile if !@profile
+  #       report = Garb::Report.new(@profile)
+  #       report.metrics :unique_pageviews
+  #       report.dimensions :page_path
+  #       report.filters :page_path.contains => page.url
+  #       page.unique_pageviews = report.results.first.unique_pageviews
+  #       page.save
+  #     end
+  #   end 
+  # end
    
   # GET /pages
   # GET /pages.json
   def index
-    update_all              ##
+    # update_all              ##
     @pages = Page.all
+    report = Garb::Report.new(profile, {:metrics => [:visits]})
+    report.all
+    
+    p report    # 으아 왠지 이건 아닌것 같다
 
     respond_to do |format|
       format.html # index.html.erb
